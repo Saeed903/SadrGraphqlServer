@@ -3,8 +3,8 @@ const { apolloExpress } = require('apollo-server');
 const { makeExecutableSchema } = require('graphql-tools');
 const { graphiqlExpress } = require('apollo-server');
 const bodyParser = require('body-parser');
-const typeDefs = require('./graphql/typeDefs');
-const resolvers = require('./graphql/resolvers');
+const typeDefs = require('./src/graphql/typeDefs');
+const resolvers = require('./src/graphql/resolvers');
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 

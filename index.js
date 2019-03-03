@@ -2,10 +2,21 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const { merge } = require('lodash');
 const  RandomUserDataSource  = require('./graphql/datasource');
-const { userTypeDefs, userResolvers}  = require('./graphql/users');
+const { randomUserTypeDefs, randomUserResolvers}  = require('./graphql/randomUsers');
 const { advertiseTypeDefs, advertiseResolvers }  = require('./graphql/advertises');
-const { tradeTypeTypeDefs, tradeTypeResolvers }  = require('./graphql/tradeTypes');
+const { tradeTypeResolvers, tradeTypeTypeDefs }  = require('./graphql/tradeTypes');
+const { countriesTypeDefs, countriesResolvers }  = require('./graphql/countries');
+const { cryptoCurrenciesTypeDefs, cryptoCurrencieResolvers }  = require('./graphql/cryptoCurrencies');
+// const { userTypeDefs, userResolvers }  = require('./graphql/users');
 
+// const dotenv = require('dotenv')
+
+// dotenv.config();
+
+// user(id:ID!):User
+        // users: [User]
+        
+        // 
 const app = express();
 
 const Query = `
@@ -15,18 +26,25 @@ const Query = `
         tradeTypes: [TradeType]
         tradeType(id:ID!): TradeType
         advertise(id:ID!): Advertise
+        hello:String
+        country(id:ID!): Country
+        countries:[Country]
+        cryptoCurrency(id:ID!): CryptoCurrency
+        cryptoCurrencies: [CryptoCurrency]
     }
 `;
 
-// const resolvers = {
-//     Query: {
-//         ...,
-//     }
-// }
+const resolvers = {
+    Query: {
+        hello(root, args, context) {
+            return 'Hello world!'
+        },
+    }
+}
 
 const server = new ApolloServer({
-    typeDefs : [Query,tradeTypeTypeDefs, userTypeDefs, advertiseTypeDefs] ,
-    resolvers : merge(tradeTypeResolvers,advertiseResolvers, userResolvers) ,
+    typeDefs : [Query, cryptoCurrenciesTypeDefs, randomUserTypeDefs, advertiseTypeDefs, tradeTypeTypeDefs, countriesTypeDefs] ,
+    resolvers : merge(resolvers, cryptoCurrencieResolvers, randomUserResolvers, advertiseResolvers, tradeTypeResolvers, countriesResolvers) ,
     dataSources: () => ({
         randomUserAPI: new RandomUserDataSource()
     })
@@ -34,6 +52,6 @@ const server = new ApolloServer({
 
 server.applyMiddleware({app});
 
-app.listen(4060,()=>{
-    console.log(`Server ready at http://localhost:4060${server.graphqlPath}`);
+app.listen(4070,()=>{
+    console.log(`Server ready at http://localhost:4070${server.graphqlPath}`);
 })
