@@ -1,4 +1,5 @@
 const { gql } = require('apollo-server-express');
+import users from './../models/usersModel';
 
 const userTypeDefs = gql`
     type User{
@@ -22,18 +23,17 @@ const userTypeDefs = gql`
 
 const userResolvers = {
     Query: {
-        users: async () => {
-            const response = await fetch(process.env.UsersRESTURL);
-            const data = await response.json();
-            const result = data.data;
-            return result;
-        },
-        user: async (_, { id })=>{
-            const response = await fetch(process.env.UsersRESTURL + `?id=${id}`);
-            const data = await response.json();
-            const result = data.data;
-            return result[0];
-        },
+            users: async() => {
+                const data = await users;
+                return data;
+            },
+            user: async (parent, { id }) => {
+                const data = await users;
+                const result = data.find(d => d.id == id);
+                console.log(result);
+                
+                return result;
+            }
     }
 };
 
