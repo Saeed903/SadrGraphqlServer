@@ -21,16 +21,16 @@ const userTypeDefs = gql`
 `
 
 const userResolvers = {
-    query: {
-        users: async ()=>{
-            const response = fetch(process.env.UsersRESTURL);
-            const data = response.json();
+    Query: {
+        users: async () => {
+            const response = await fetch(process.env.UsersRESTURL);
+            const data = await response.json();
             const result = data.data;
             return result;
         },
         user: async (_, { id })=>{
-            const response = fetch(process.env.UsersRESTURL + `?id=${id}`);
-            const data = response.json();
+            const response = await fetch(process.env.UsersRESTURL + `?id=${id}`);
+            const data = await response.json();
             const result = data.data;
             return result[0];
         },

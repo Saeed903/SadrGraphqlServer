@@ -1,4 +1,4 @@
-const  {gql} = require('apollo-server-express');
+import {gql} from 'apollo-server-express';
 const fetch = require('node-fetch');
 
 const countriesTypeDefs = gql`
@@ -14,13 +14,14 @@ const countriesResolvers = {
     Query: {
         countries: async()=>{
             const response = await fetch(process.env.CountriesRESTURL);
-            const data = response.json();
-            const result = data.data;
-            return result;
+            const data = await response.json();
+            console.log(data);
+            
+            return data.data;
         },
         country: async(_,{id}) =>{
             const response = await fetch(process.env.CountriesRESTURL + `?id=${id}`);
-            const data = resonse.json();
+            const data = await response.json();
             const result = data.data;
             return result[0];
         }

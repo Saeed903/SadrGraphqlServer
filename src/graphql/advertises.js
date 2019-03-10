@@ -7,9 +7,9 @@ const advertiseTypeDefs = gql`
         tradeTyepId:Int
         tradeType:TradeType
         countryId:Int
-        # country:Country
+        country:Country
         cryptoCurrencyId: Int
-        # cryptoCurrency: CryptoCurrency
+        cryptoCurrency: CryptoCurrency
         margin:Float
         priceEquation: String
         minTransactionLimit: Float
@@ -21,7 +21,7 @@ const advertiseTypeDefs = gql`
         smsVerification: Boolean
         trustedPeopleOnly: Boolean
         ownerId:Int!
-        # owner:User
+        owner:User
     }
 
     # type Query{
@@ -41,7 +41,13 @@ const advertiseResolvers= {
             const data = await response.json();
             const result = data.data;
             return result[0];
-        }
+        },
+        tradeTypes:async () => {
+            const response = await fetch(process.env.TradeTypesRESTURL);
+            const data = await response.json();
+            //console.log(data.data);
+            return data.data;
+        },
     },
     Advertise:{
         tradeType: async(parent) => {
@@ -50,24 +56,25 @@ const advertiseResolvers= {
             const result = data.data;
             return result[0];      
         },
-        // owner: async(parent) => {
-        //     const response = await fetch( process.env.UsersRESTURL + `?id=${parent.owneId}`);
-        //     const data = await response.json();
-        //     const result = data.data;
-        //     return result[0];
-        // },
-        // cryptoCurrency: async(parent) => {
-        //     const response = await fetch( process.env.CryptoCurrenciesRESTURL + `?id=${parent.cryptoCurrencyId}`);
-        //     const data = await response.json();
-        //     const result = data.data;
-        //     return result[0];
-        // },
-        // country: async(parent) => {
-        //     const response = await fetch( process.env.CountiresRESTURL + `?id=${parent.countryId}`);
-        //     const data = await response.json();
-        //     const result = data.data;
-        //     return result[0];
-        // },
+        owner: async(parent) => {
+            const response = await fetch( process.env.UsersRESTURL + `?id=${parent.ownerId}`);
+            const data = await response.json();
+            const result = data.data;
+            return result[0];
+        },
+        cryptoCurrency: async(parent) => {
+            const response = await fetch( process.env.CryptoCurrenciesRESTURL + `?id=${parent.cryptoCurrencyId}`);
+            const data = await response.json();
+            const result = data.data;
+            return result[0];
+        },
+        country: async(parent) => {
+            const response = await fetch( process.env.CountriesRESTURL + `?id=${parent.countryId}`);
+            const data = await response.json();
+            const result = data.data;
+            
+            return result[0];
+        },
     }
 };
 

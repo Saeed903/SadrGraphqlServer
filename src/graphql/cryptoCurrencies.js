@@ -1,4 +1,5 @@
 const { gql } = require('apollo-server-express');
+const fetch = require('node-fetch');
 
 const cryptoCurrenciesTypeDefs = gql`
     type CryptoCurrency{
@@ -13,8 +14,10 @@ const cryptoCurrenciesTypeDefs = gql`
 const cryptoCurrencieResolvers = {
     Query: {
         cryptoCurrencies: async ()=>{
-            const response = fetch(process.env.CryptoCurrenciesRESTURL);
-            const data = response.json();
+            const response = await fetch(process.env.CryptoCurrenciesRESTURL);
+            const data = await response.json();
+            console.log(data);
+            
             const result = data.data;
             return result;
         },
